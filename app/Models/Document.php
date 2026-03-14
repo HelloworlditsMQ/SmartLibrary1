@@ -24,17 +24,17 @@ class Document extends Model
         'publication_year',
         'language',
         'user_id',
-        'status',           // ADDED
-        'rejection_reason', // ADDED
-        'moderated_by',     // ADDED
-        'moderated_at',     // ADDED
+        'status',          
+        'rejection_reason', 
+        'moderated_by',     
+        'moderated_at',    
     ];
 
     protected $casts = [
         'tags' => 'array',
         'publication_year' => 'integer',
         'file_size' => 'integer',
-        'moderated_at' => 'datetime', // ADDED
+        'moderated_at' => 'datetime', 
     ];
 
     // Relationships
@@ -43,13 +43,13 @@ class Document extends Model
         return $this->belongsTo(User::class);
     }
 
-    // ADDED: Moderator relationship
+    //Moderator relationship
     public function moderator()
     {
         return $this->belongsTo(User::class, 'moderated_by');
     }
 
-    // ADDED: Status scopes
+    //Status scopes
     public function scopePending(Builder $query)
     {
         return $query->where('status', 'pending');
@@ -65,19 +65,19 @@ class Document extends Model
         return $query->where('status', 'rejected');
     }
 
-    // ADDED: Check if user is owner
+    //Check if user is owner
     public function isOwner(User $user): bool
     {
         return $this->user_id === $user->id;
     }
 
-    // ADDED: Check if can be edited (only pending or rejected)
+    //Check if can be edited (only pending or rejected)
     public function canBeEdited(): bool
     {
         return in_array($this->status, ['pending', 'rejected']);
     }
 
-    // Existing scopes (keep these)
+    // Existing scopes
     public function scopeOfGenre(Builder $query, $genre)
     {
         return $query->when($genre, fn($q) => $q->where('genre', $genre));
@@ -140,7 +140,7 @@ class Document extends Model
         return $this->tags ?? [];
     }
 
-    // ADDED: Status badge color helper
+    //Status badge color helper
     public function getStatusColorAttribute(): string
     {
         return match($this->status) {

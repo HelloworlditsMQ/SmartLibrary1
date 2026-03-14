@@ -13,7 +13,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
     
-    // Document viewing/downloading (now protected)
+    // Document viewing/downloading 
     Route::get('/documents/{id}/download', [TestUploadController::class, 'download']);
     Route::get('/documents/{id}/view', [TestUploadController::class, 'view']);
     

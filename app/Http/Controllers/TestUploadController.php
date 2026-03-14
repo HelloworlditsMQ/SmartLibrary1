@@ -64,7 +64,7 @@ class TestUploadController extends Controller
                                 'publication_year' => ['type' => 'integer'],
                                 'file_size' => ['type' => 'integer'],
                                 'created_at' => ['type' => 'date'],
-                                'status' => ['type' => 'keyword'] // ADDED for ES
+                                'status' => ['type' => 'keyword'] 
                             ]
                         ]
                     ]
@@ -75,11 +75,6 @@ class TestUploadController extends Controller
         }
     }
 
-    // ==================== EXISTING METHODS (MODIFIED) ====================
-
-    /**
-     * Get metadata for filters - MODIFIED to only show approved docs stats
-     */
     public function metadata()
     {
         // Only count approved documents for public stats
@@ -120,9 +115,7 @@ class TestUploadController extends Controller
         ]);
     }
 
-    /**
-     * Public index - MODIFIED to only show APPROVED documents
-     */
+
     public function index(Request $request)
     {
         $query = Document::approved() // ONLY APPROVED
@@ -181,9 +174,7 @@ class TestUploadController extends Controller
         }
     }
 
-    /**
-     * Public search - MODIFIED to only search APPROVED documents
-     */
+    
     public function search(Request $request)
     {
         $query = $request->get('q', '');
@@ -366,7 +357,7 @@ class TestUploadController extends Controller
 }
 
     /**
-     * Store - MODIFIED to set status='pending' by default
+     * set status='pending' by default
      */
     public function store(Request $request)
     {
@@ -454,11 +445,7 @@ class TestUploadController extends Controller
         ]);
     }
 
-    // ==================== NEW USER METHODS ====================
 
-    /**
-     * Get current user's documents (all statuses)
-     */
     public function myDocuments(Request $request)
     {
         $user = $request->user();
@@ -492,9 +479,7 @@ class TestUploadController extends Controller
         return response()->json(['data' => $documents]);
     }
 
-    /**
-     * Update user's own document (only if pending or rejected)
-     */
+
     public function update(Request $request, $id)
     {
         $user = $request->user();
@@ -577,7 +562,6 @@ class TestUploadController extends Controller
             unlink($fullPath);
         }
         
-        // Delete from Elasticsearch
         try {
             $this->elasticsearch->delete([
                 'index' => self::ES_INDEX,
@@ -592,11 +576,7 @@ class TestUploadController extends Controller
         return response()->json(['message' => 'Document deleted']);
     }
 
-    // ==================== NEW ADMIN METHODS ====================
 
-    /**
-     * Get all pending documents (admin only)
-     */
     public function pendingDocuments(Request $request)
 {
     $user = $request->user();
@@ -610,8 +590,7 @@ class TestUploadController extends Controller
         ->sortedBy($request->sort ?? 'oldest') // Oldest first (waiting longest)
         ->get()
         ->map(function ($doc) {
-            $uploader = $doc->user; // may be null
-
+            $uploader = $doc->user; 
             return [
                 'id' => $doc->id,
                 'original_name' => $doc->original_name,
@@ -735,9 +714,6 @@ class TestUploadController extends Controller
         ]);
     }
 
-    /**
-     * Bulk approve/reject (admin only)
-     */
     public function bulkAction(Request $request)
     {
         $user = $request->user();
@@ -783,7 +759,6 @@ class TestUploadController extends Controller
         ]);
     }
 
-    // ==================== PRIVATE HELPER METHODS (UNCHANGED) ====================
 
     private function generateThumbnail($pdfPath, $documentId)
     {

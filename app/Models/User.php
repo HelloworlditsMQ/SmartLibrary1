@@ -28,13 +28,13 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    // ADDED: Check if user is admin
+    //Check if user is admin
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
     }
 
-    // ADDED: User's documents relationship
+    //User's documents relationship
     public function documents()
     {
         return $this->hasMany(Document::class);

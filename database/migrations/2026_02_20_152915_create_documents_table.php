@@ -13,7 +13,7 @@ return new class extends Migration
             $table->string('original_name');     // "Real-Time-Color-Based-Object-Tracking.pdf"
             $table->string('file_path');         // "documents/1771567367_Real-Time-Color-Based-Object-Tracking.pdf"
             $table->string('file_size')->nullable(); // file size in bytes
-            $table->text('raw_text')->nullable();    // extracted text from OCR (later)
+            $table->text('raw_text')->nullable();    // extracted text from OCR 
             $table->timestamps();                // created_at, updated_at
             $table->fullText('raw_text');        // for search (MySQL FULLTEXT index)
         });
